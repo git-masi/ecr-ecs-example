@@ -1,0 +1,41 @@
+service: infra
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: ${self:custom.deploymentBucketName}
+  deploymentPrefix: ${self:custom.basename}
+
+custom:
+  basename: ${self:service}-${self:provider.stage}
+  deploymentBucketName: eric-experiments-k9xjhbjk3r4s
+
+resources:
+  Resources:
+    TestFilesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: test-files-k9xjhbjk3r4s-${self:provider.stage}
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerEnforced
+
+    TestFilesBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref TestFilesBucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicRead
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: !Join
+                - ""
+                - - !GetAtt TestFilesBucket.Arn
+                  - /*
