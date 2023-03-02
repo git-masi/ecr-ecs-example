@@ -13,6 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@types/papaparse": "^5.3.7",
     "eslint-config-custom": "*",
     "nodemon": "^2.0.21",
     "prettier": "latest",
