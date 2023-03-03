@@ -1,7 +1,6 @@
 import { makeTransaction } from "./transactions/transactions";
 import { getBucketName, upload } from "./upload/s3";
 import papa from "papaparse";
-// import { writeFile } from "fs/promises";
 
 (async () => {
   const now = new Date();
@@ -15,9 +14,7 @@ import papa from "papaparse";
 
   const csv = papa.unparse(transactions, { newline: "\n" });
 
-  console.log(csv);
-
   await upload(bucketName, `${basename}.csv`, Buffer.from(csv));
 
-  // await writeFile(`data.csv`, Buffer.from(csv));
+  console.log(`Finished writing files for ${basename}`);
 })();

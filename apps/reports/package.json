@@ -7,9 +7,19 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "exec": "ts-node ./src/index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "clean": "rm -rf ./dist",
+    "build": "esbuild ./src/index.ts --bundle --platform=node --outdir=dist"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.282.0",
+    "@aws-sdk/credential-providers": "^3.282.0",
+    "@faker-js/faker": "^7.6.0",
+    "esbuild": "^0.17.10",
+    "papaparse": "^5.4.0",
+    "tsconfig": "*"
+  }
 }

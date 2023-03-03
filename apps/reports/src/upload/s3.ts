@@ -3,8 +3,18 @@ import {
   ListBucketsCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
+import { getCredentials } from "../credentials/credentials";
 
-const client = new S3Client({ region: "us-east-1" });
+const client = (async () => {
+  return new S3Client({
+    region: "us-east-1",
+    credentials: await getCredentials()(),
+  });
+})();
+
+// const client = new S3Client({
+//   region: "us-east-1",
+// });
 
 export async function upload(
   bucketName: string,
@@ -16,7 +26,7 @@ export async function upload(
     Bucket: bucketName,
     Body: body,
   });
-  await client.send(cmd);
+  await (await client).send(cmd);
 }
 
 export async function getBucketName() {
@@ -26,6 +36,6 @@ export async function getBucketName() {
   );
 }
 
-function listBuckets() {
-  return client.send(new ListBucketsCommand({}));
+async function listBuckets() {
+  return (await client).send(new ListBucketsCommand({}));
 }
