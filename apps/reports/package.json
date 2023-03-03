@@ -24,6 +24,6 @@
     "papaparse": "^5.4.0"
   },
   "devDependencies": {
-    "tsconfig": "^0.0.0"
+    "tsconfig": "*"
   }
 }
