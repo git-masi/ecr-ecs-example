@@ -19,16 +19,16 @@ resources:
     ReportsEcrRepository:
       Type: AWS::ECR::Repository
       Properties:
-        # EncryptionConfiguration: EncryptionConfiguration
-        ImageScanningConfiguration:
-          ScanOnPush: false
         ImageTagMutability: IMMUTABLE
-        # LifecyclePolicy: LifecyclePolicy
         RepositoryName: reports-containers-${self:provider.stage}
-        # RepositoryPolicyText: Json
         Tags:
-          - ReportsEcrRepository
-          - reports-containers
+          - Key: "reports-containers"
+            Value: "reports-containers"
+        # EncryptionConfiguration: EncryptionConfiguration
+        # ImageScanningConfiguration:
+        #   ScanOnPush: false
+        # LifecyclePolicy: LifecyclePolicy
+        # RepositoryPolicyText: Json
 
   Outputs:
     reportsArn:

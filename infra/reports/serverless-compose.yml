@@ -5,8 +5,8 @@ services:
   reports-ecr:
     path: ecr
 
-  reports-ecs:
-    path: ecs
-    dependsOn: reports-ecr
-    params:
-      registryArn: ${reports-ecr.registryArn}
+  # reports-ecs:
+  #   path: ecs
+  #   dependsOn: reports-ecr
+  #   params:
+  #     registryArn: ${reports-ecr.registryArn}
