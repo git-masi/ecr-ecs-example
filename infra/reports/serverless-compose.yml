@@ -1,0 +1,11 @@
+services:
+  reports-s3:
+    path: s3
+
+  reports-ecr:
+    path: ecr
+
+  reports-ecs:
+    path: ecs
+    params:
+      registryArn: ${reports-ecr.registryArn}

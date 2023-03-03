@@ -1,4 +1,4 @@
-service: infra
+service: reports-s3
 
 frameworkVersion: "3"
 

@@ -1,0 +1,35 @@
+service: reports-ecr
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: ${self:custom.deploymentBucketName}
+  deploymentPrefix: ${self:custom.basename}
+
+custom:
+  basename: ${self:service}-${self:provider.stage}
+  deploymentBucketName: eric-experiments-k9xjhbjk3r4s
+
+resources:
+  Resources:
+    ReportsEcrRepository:
+      Type: AWS::ECR::Repository
+      Properties:
+        # EncryptionConfiguration: EncryptionConfiguration
+        ImageScanningConfiguration:
+          ScanOnPush: false
+        ImageTagMutability: IMMUTABLE
+        # LifecyclePolicy: LifecyclePolicy
+        RepositoryName: reports-containers-${self:provider.stage}
+        # RepositoryPolicyText: Json
+        Tags:
+          - ReportsEcrRepository
+          - reports-containers
+
+  Outputs:
+    reportsArn:
+      Value: !GetAtt ReportsEcrRepository.Arn

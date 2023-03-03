@@ -1,0 +1,43 @@
+service: reports-ecs
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: ${self:custom.deploymentBucketName}
+  deploymentPrefix: ${self:custom.basename}
+
+custom:
+  basename: ${self:service}-${self:provider.stage}
+  deploymentBucketName: eric-experiments-k9xjhbjk3r4s
+
+resources:
+  Resources:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - ContainerDefinition
+      Cpu: String
+      EphemeralStorage: EphemeralStorage
+      ExecutionRoleArn: String
+      Family: String
+      InferenceAccelerators:
+        - InferenceAccelerator
+      IpcMode: String
+      Memory: String
+      NetworkMode: String
+      PidMode: String
+      PlacementConstraints:
+        - TaskDefinitionPlacementConstraint
+      ProxyConfiguration: ProxyConfiguration
+      RequiresCompatibilities:
+        - String
+      RuntimePlatform: RuntimePlatform
+      Tags:
+        - Tag
+      TaskRoleArn: String
+      Volumes:
+        - Volume
