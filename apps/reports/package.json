@@ -9,7 +9,9 @@
     "exec": "ts-node ./src/index.ts",
     "test": "vitest",
     "clean": "rm -rf ./dist",
-    "build": "esbuild ./src/index.ts --bundle --platform=node --outdir=dist"
+    "build": "esbuild ./src/index.ts --bundle --platform=node --outdir=dist",
+    "upWithCreds": "ts-node ./dockerComposeWithCredentials.ts",
+    "downRemoveAll": "docker compose down --rmi all"
   },
   "keywords": [],
   "author": "",
