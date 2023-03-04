@@ -16,28 +16,45 @@ custom:
 
 resources:
   Resources:
-    Type: AWS::ECS::TaskDefinition
+    Type: AWS::ECS::Cluster
     Properties:
-      ContainerDefinitions:
-        - ContainerDefinition
-      Cpu: String
-      EphemeralStorage: EphemeralStorage
-      ExecutionRoleArn: String
-      Family: String
-      InferenceAccelerators:
-        - InferenceAccelerator
-      IpcMode: String
-      Memory: String
-      NetworkMode: String
-      PidMode: String
-      PlacementConstraints:
-        - TaskDefinitionPlacementConstraint
-      ProxyConfiguration: ProxyConfiguration
-      RequiresCompatibilities:
-        - String
-      RuntimePlatform: RuntimePlatform
+      CapacityProviders:
+        - FARGATE
+      ClusterName: reports-cluster
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      # Configuration: ClusterConfiguration
+      DefaultCapacityProviderStrategy:
+        - Base: 1
+          CapacityProvider: FARGATE
+          Weight: 1
+      # ServiceConnectDefaults: ServiceConnectDefaults
       Tags:
-        - Tag
-      TaskRoleArn: String
-      Volumes:
-        - Volume
+        - reports-cluster
+
+    # Type: AWS::ECS::TaskDefinition
+    # Properties:
+    #   ContainerDefinitions:
+    #     - ContainerDefinition
+    #   Cpu: String
+    #   EphemeralStorage: EphemeralStorage
+    #   ExecutionRoleArn: String
+    #   Family: String
+    #   InferenceAccelerators:
+    #     - InferenceAccelerator
+    #   IpcMode: String
+    #   Memory: String
+    #   NetworkMode: String
+    #   PidMode: String
+    #   PlacementConstraints:
+    #     - TaskDefinitionPlacementConstraint
+    #   ProxyConfiguration: ProxyConfiguration
+    #   RequiresCompatibilities:
+    #     - String
+    #   RuntimePlatform: RuntimePlatform
+    #   Tags:
+    #     - Tag
+    #   TaskRoleArn: String
+    #   Volumes:
+    #     - Volume
