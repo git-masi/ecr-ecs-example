@@ -31,5 +31,5 @@ resources:
         # RepositoryPolicyText: Json
 
   Outputs:
-    reportsArn:
+    reportsRegistryArn:
       Value: !GetAtt ReportsEcrRepository.Arn
