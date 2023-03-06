@@ -38,7 +38,7 @@ resources:
               LaunchType: "FARGATE"
               NetworkConfiguration:
                 AwsVpcConfiguration:
-                  AssignPublicIp: "DISABLED"
+                  AssignPublicIp: "ENABLED"
                   # Example `SecurityGroups` from docs
                   # SecurityGroups:
                   #   Fn: : GetAtt:
