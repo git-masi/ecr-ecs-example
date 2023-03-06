@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - reports-dev-*
+    branches:
+      - master
+    paths:
+      - apps/reports/**
 
 jobs:
   build:
