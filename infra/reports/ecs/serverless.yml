@@ -50,7 +50,11 @@ resources:
             #   - KeyValuePair
             # Secrets:
             #   - Secret
-            Image: "${param:reportsRegistryUri}:latest"
+
+            # TODO: How do we avoid hard coding an image like this?
+            # `${param:reportsRegistryUri}:latest` doesn't work
+            Image: "${param:reportsRegistryUri}:403402cba3753df3f4fa96f610eebd707efe599e"
+
             LogConfiguration:
               LogDriver: "awslogs"
               Options:
@@ -80,7 +84,8 @@ resources:
         RequiresCompatibilities:
           - "FARGATE"
         RuntimePlatform:
-          CpuArchitecture: "ARM64"
+          # The `CpuArchitecture` needs match whatever builds the container (e.g. whatever happens in GitHub actions)
+          CpuArchitecture: "X86_64"
           OperatingSystemFamily: "LINUX"
         # Tags:
         #   - Tag
