@@ -30,4 +30,5 @@ RUN npm install --omit=dev
 
 COPY --from=build /usr/src/app/dist ./dist
 
-CMD [ "node", "dist/index.js" ]
+# We should execute the command from the calling service
+# CMD [ "node", "dist/index.js" ]

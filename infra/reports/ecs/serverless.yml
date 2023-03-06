@@ -41,8 +41,9 @@ resources:
         ContainerDefinitions:
           - #
             # We could use this `Command` as a replacement for `CMD [ "node", "dist/index.js" ]` in the Dockerfile
-            # Command:
-            #   - String
+            Command:
+              - "node"
+              - "dist/index.js"
             # We can use `Environment` to specify ENV vars
             # Might need this for credentials or perhaps `Secrets` below
             # Environment:
