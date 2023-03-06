@@ -33,3 +33,5 @@ resources:
   Outputs:
     reportsRegistryArn:
       Value: !GetAtt ReportsEcrRepository.Arn
+    reportsRegistryUri:
+      Value: !GetAtt ReportsEcrRepository.RepositoryUri

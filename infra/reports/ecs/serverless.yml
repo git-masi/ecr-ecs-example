@@ -35,29 +35,83 @@ resources:
           - Key: "reports-cluster"
             Value: "reports-cluster"
 
-      # TaskNameHere:
-      #   Type: AWS::ECS::TaskDefinition
-      #   Properties:
-      #     ContainerDefinitions:
-      #       - ContainerDefinition
-      #     Cpu: String
-      #     EphemeralStorage: EphemeralStorage
-      #     ExecutionRoleArn: String
-      #     Family: String
-      #     InferenceAccelerators:
-      #       - InferenceAccelerator
-      #     IpcMode: String
-      #     Memory: String
-      #     NetworkMode: String
-      #     PidMode: String
-      #     PlacementConstraints:
-      #       - TaskDefinitionPlacementConstraint
-      #     ProxyConfiguration: ProxyConfiguration
-      #     RequiresCompatibilities:
-      #       - String
-      #     RuntimePlatform: RuntimePlatform
-      #     Tags:
-      #       - Tag
-      #     TaskRoleArn: String
-      #     Volumes:
-      #       - Volume
+    ReportsEcsTask:
+      Type: AWS::ECS::TaskDefinition
+      Properties:
+        ContainerDefinitions:
+          - #
+            # We could use this `Command` as a replacement for `CMD [ "node", "dist/index.js" ]` in the Dockerfile
+            # Command:
+            #   - String
+            # We can use `Environment` to specify ENV vars
+            # Might need this for credentials or perhaps `Secrets` below
+            # Environment:
+            #   - KeyValuePair
+            # Secrets:
+            #   - Secret
+            Image: ${param:reportsRegistryUri}
+            LogConfiguration:
+              LogDriver: "awslogs"
+              Options:
+                awslogs-group: "reports-ecs-task"
+                awslogs-region: "us-east-1"
+                awslogs-create-group: "true"
+                awslogs-stream-prefix: "reports-ecs"
+              # SecretOptions:
+              #   - Secret
+            # Cpu: Integer
+            # Memory: Integer
+            # MemoryReservation: Integer
+            Name: "reports-container"
+            ReadonlyRootFilesystem: true
+            # TBD if this is needed
+            # RepositoryCredentials: RepositoryCredentials
+            # StartTimeout: Integer
+            # StopTimeout: Integer
+            # Unknown if working directory is needed or not given that it's specified in the Dockerfile
+            WorkingDirectory: "/usr/src/app"
+        Cpu: "512"
+        Memory: "1024"
+        # EphemeralStorage: EphemeralStorage
+        ExecutionRoleArn: ${param:reportsTaskRoleArn}
+        Family: "reports"
+        NetworkMode: "awsvpc"
+        RequiresCompatibilities:
+          - "FARGATE"
+        RuntimePlatform:
+          CpuArchitecture: "ARM64"
+          OperatingSystemFamily: "LINUX"
+        # Tags:
+        #   - Tag
+        TaskRoleArn: ${param:reportsTaskRoleArn}
+
+    # I don't think we need the service for scheduled tasks
+    # This seems to only be a thing for long running tasks
+    # TBD
+    # ReportsEcsService:
+    #   Type: AWS::ECS::Service
+    #   Properties:
+    #     Cluster: !GetAtt ReportsEcsCluster.Arn
+    #     DesiredCount: 1
+    #     # We might need `EnableExecuteCommand` if we replace the `CMD` line in the Dockerfile
+    #     # EnableExecuteCommand: Boolean
+    #     LaunchType: "FARGATE"
+    #     # We might need `NetworkConfiguration` for VPC stuff
+    #     # NetworkConfiguration: NetworkConfiguration
+    #     PlatformVersion: "LATEST"
+    #     PropagateTags: "TASK_DEFINITION"
+    #     # Role: String
+    #     SchedulingStrategy: "REPLICA"
+    #     # ServiceConnectConfiguration: ServiceConnectConfiguration
+    #     ServiceName: "reports-task-ecs-service"
+    #     # ServiceRegistries:
+    #     #   - ServiceRegistry
+    #     # Tags:
+    #     #   - Tag
+    #     TaskDefinition: !GetAtt ReportsEcsTask.Arn
+
+  Outputs:
+    reportsClusterArn:
+      Value: !GetAtt ReportsEcsCluster.Arn
+    reportsTaskArn:
+      Value: !Ref ReportsEcsTask

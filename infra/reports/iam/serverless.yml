@@ -1,0 +1,116 @@
+service: reports-iam
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: ${self:custom.deploymentBucketName}
+  deploymentPrefix: ${self:custom.basename}
+
+custom:
+  basename: ${self:service}-${self:provider.stage}
+  deploymentBucketName: eric-experiments-k9xjhbjk3r4s
+
+resources:
+  Resources:
+    # ReportsTaskIamPolicy:
+    #   Type: AWS::IAM::Policy
+    #   Properties:
+    #     PolicyName: reports-task-iam-policy
+    #     PolicyDocument:
+    #       Version: "2012-10-17"
+    #       Statement:
+    #         - #
+    #           Effect: "Allow"
+    #           Action:
+    #             - "ecs:RegisterTaskDefinition"
+    #             - "ecs:ListTaskDefinitions"
+    #             - "ecs:DescribeTaskDefinition"
+    #             - "ecs:RunTask"
+    #             - "ecs:StartTask"
+    #             - "s3:PutObject"
+    #           Resource:
+    #             - "*"
+    #         - #
+    #           Effect: "Allow"
+    #           Principal:
+    #             Service:
+    #               - "ecs-tasks.amazonaws.com"
+    #           Action: "sts:AssumeRole"
+    #           Condition:
+    #             ArnLike:
+    #               aws:SourceArn: "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
+
+    AllowAnyIamRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: allow-any-iam-role
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                # AWS: 967597777336
+                Service:
+                  - "events.amazonaws.com"
+                #   - "ecs-tasks.amazonaws.com"
+              Action: "sts:AssumeRole"
+        Policies:
+          - PolicyName: allow-any-iam-policy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "*"
+                  Resource:
+                    - "*"
+
+    ReportsTaskIamRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Service:
+                  - "ecs-tasks.amazonaws.com"
+              Action: "sts:AssumeRole"
+              # Condition:
+              #   ArnLike:
+              #     aws:SourceArn: "arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:*"
+        # Description: String
+        # ManagedPolicyArns:
+        #   - String
+        # MaxSessionDuration: Integer
+        # Path: String
+        # PermissionsBoundary: String
+        Policies:
+          - PolicyName: reports-task-iam-policy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    # - "ecs:RegisterTaskDefinition"
+                    # - "ecs:ListTaskDefinitions"
+                    # - "ecs:DescribeTaskDefinition"
+                    # - "ecs:RunTask"
+                    # - "ecs:StartTask"
+                    # - "s3:PutObject"
+                    - "*"
+                  Resource:
+                    - "*"
+        RoleName: reports-task-iam-role
+        # Tags:
+        #   - Tag
+
+  Outputs:
+    allowAnyRoleArn:
+      Value: !GetAtt AllowAnyIamRole.Arn
+    reportsTaskRoleArn:
+      Value: !GetAtt ReportsTaskIamRole.Arn

@@ -5,8 +5,27 @@ services:
   reports-ecr:
     path: ecr
 
+  reports-iam:
+    path: iam
+
   reports-ecs:
     path: ecs
-    dependsOn: reports-ecr
+    dependsOn:
+      - reports-ecr
+      - reports-iam
     params:
       reportsRegistryArn: ${reports-ecr.reportsRegistryArn}
+      reportsRegistryUri: ${reports-ecr.reportsRegistryUri}
+      allowAnyRoleArn: ${reports-iam.allowAnyRoleArn}
+      reportsTaskRoleArn: ${reports-iam.reportsTaskRoleArn}
+
+  reports-events:
+    path: events
+    dependsOn:
+      - reports-iam
+      - reports-ecs
+    params:
+      allowAnyRoleArn: ${reports-iam.allowAnyRoleArn}
+      reportsTaskRoleArn: ${reports-iam.reportsTaskRoleArn}
+      reportsClusterArn: ${reports-ecs.reportsClusterArn}
+      reportsTaskArn: ${reports-ecs.reportsTaskArn}

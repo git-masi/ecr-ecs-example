@@ -1,0 +1,63 @@
+service: reports-events
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: ${self:custom.deploymentBucketName}
+  deploymentPrefix: ${self:custom.basename}
+
+custom:
+  basename: ${self:service}-${self:provider.stage}
+  deploymentBucketName: eric-experiments-k9xjhbjk3r4s
+
+resources:
+  Resources:
+    ReportsEvent:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: Event to trigger reports job on schedule
+        # Omit `EventBusName` to use default
+        # EventBusName: String
+        # EventPattern: Json
+        Name: reports-event
+        RoleArn: ${param:allowAnyRoleArn}
+        ScheduleExpression: "rate(3 minutes)"
+        State: ENABLED
+        Targets:
+          - Arn: ${param:reportsClusterArn}
+            EcsParameters:
+              # CapacityProviderStrategy:
+              #   - CapacityProviderStrategyItem
+              # EnableECSManagedTags: Boolean
+              # EnableExecuteCommand: Boolean
+              # Group: String
+              LaunchType: "FARGATE"
+              NetworkConfiguration:
+                AwsVpcConfiguration:
+                  AssignPublicIp: "DISABLED"
+                  # Example `SecurityGroups` from docs
+                  # SecurityGroups:
+                  #   Fn: : GetAtt:
+                  #     "ScheduledFargateTaskScheduledTaskDefSecurityGroupE075BC19",
+                  #     "GroupId"
+                  Subnets:
+                    #  The docs seem to indicate that we can reference a VPC to use it's subnets
+                    #  it is not obvious how to get it to work though
+                    # Ref: "Vpc01"
+                    - "subnet-95a40aca"
+              PlatformVersion: "LATEST"
+              PropagateTags: "TASK_DEFINITION"
+              # ReferenceId: String
+              # TagList:
+              #   - Tag
+              TaskCount: 1
+              TaskDefinitionArn: ${param:reportsTaskArn}
+            Id: reports-event-esc-target
+            # We might be able to use `Input` to send some values to the target
+            # Input:
+            #  TBD if `RoleArn` is required
+            RoleArn: ${param:allowAnyRoleArn}
