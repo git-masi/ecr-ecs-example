@@ -18,10 +18,6 @@ const client = (async () => {
   });
 })();
 
-// const client = new S3Client({
-//   region: "us-east-1",
-// });
-
 export async function upload(
   bucketName: string,
   key: string,
