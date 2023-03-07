@@ -3,12 +3,18 @@ import {
   ListBucketsCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
-// import { getCredentials } from "../credentials/credentials";
+import { getCredentials } from "../credentials/credentials";
 
 const client = (async () => {
+  if (process.env["NODE_ENV"] === "production") {
+    return new S3Client({
+      region: "us-east-1",
+    });
+  }
+
   return new S3Client({
     region: "us-east-1",
-    // credentials: await getCredentials()(),
+    credentials: await getCredentials()(),
   });
 })();
 
