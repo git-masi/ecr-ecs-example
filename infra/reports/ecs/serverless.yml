@@ -53,7 +53,7 @@ resources:
 
             # TODO: How do we avoid hard coding an image like this?
             # `${param:reportsRegistryUri}:latest` doesn't work
-            Image: "${param:reportsRegistryUri}:403402cba3753df3f4fa96f610eebd707efe599e"
+            Image: "${param:reportsRegistryUri}:97961b826dffa568c2f307ff3b8e650239b52750"
 
             LogConfiguration:
               LogDriver: "awslogs"

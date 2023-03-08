@@ -8,6 +8,9 @@ on:
       - master
     paths:
       - apps/reports/**
+    # We could use the ignore syntax to collocate the infra with the app code
+    # paths-ignore:
+    #   - 'apps/reports/infra/**'
 
 jobs:
   build:

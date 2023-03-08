@@ -19,7 +19,8 @@ resources:
     ReportsEcrRepository:
       Type: AWS::ECR::Repository
       Properties:
-        ImageTagMutability: IMMUTABLE
+        # ImageTagMutability: IMMUTABLE
+        ImageTagMutability: MUTABLE
         RepositoryName: reports-containers-${self:provider.stage}
         Tags:
           - Key: "reports-containers"
