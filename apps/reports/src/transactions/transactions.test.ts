@@ -7,4 +7,9 @@ describe("transactions", () => {
 
     expect(t).toHaveProperty("name");
   });
+
+  // Added this for testing github actions
+  it("should fail", () => {
+    expect(true).toBe(false);
+  });
 });
