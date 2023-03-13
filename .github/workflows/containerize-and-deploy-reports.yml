@@ -36,6 +36,8 @@ jobs:
         run: npx vitest **/*.test.ts --run
 
   build:
+    needs:
+      - test
     name: Build
     runs-on: ubuntu-latest
     env:
