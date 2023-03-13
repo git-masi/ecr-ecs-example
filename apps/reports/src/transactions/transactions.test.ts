@@ -9,7 +9,7 @@ describe("transactions", () => {
   });
 
   // Added this for testing github actions
-  it("should fail", () => {
+  it.skip("should fail", () => {
     expect(true).toBe(false);
   });
 });
