@@ -33,7 +33,7 @@ jobs:
 
       - name: Run vitest once on .test.ts files
         working-directory: ${{ env.working-directory }}
-        run: npx vitest **/*.test.ts --run
+        run: npx vitest --run -c ./vitest.test.config.ts
 
   build:
     # Only run the build step if there is a push/merge to master
